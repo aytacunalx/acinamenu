@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" href="logo-1.png" type="image/x-icon" />
+  <title>Açina Menü</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #eb1c22;
+      --text-dark: #222222;
+      --text-light: #585858;
+      --bg-light: #f8f9fa;
+      --white: #ffffff;
+      --border-radius: 12px;
+      --shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      line-height: 1.6;
+    }
+
+    .menu-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .header img {
+      max-width: 250px;
+      width: 100%;
+    }
+
+    .menu-category {
+      padding-top: 70px; /* Sabit menü için boşluk */
+      margin-top: -60px; /* Boşluğu dengelemek için */
+      margin-bottom: 2.5rem;
+    }
+    
+    .menu-category:last-of-type {
+        margin-bottom: 0;
+    }
+
+    .category-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      border-bottom: 3px solid var(--primary-color);
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+      color: var(--primary-color);
+    }
+
+    .item {
+      background: var(--white);
+      padding: 1.25rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 1rem;
+      transition: transform 0.2s ease-in-out;
+    }
+
+    .item:hover {
+        transform: translateY(-5px);
+    }
+
+    .item-title {
+      font-weight: 600;
+      font-size: 1.15rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .item-title span {
+      font-weight: 700;
+      color: var(--primary-color);
+      font-size: 1.2rem;
+      white-space: nowrap;
+      margin-left: 1rem;
+    }
+
+    .item-desc {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      margin-top: 0.4rem;
+    }
+    
+    .item-sub-desc {
+        font-size: 0.8rem;
+        color: #999;
+        margin-top: 0.5rem;
+        font-style: italic;
+    }
+
+    .image-container {
+      width: 100%;
+      margin: 1.5rem auto;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .image-container img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    
+    /* --- Açılır Menü Stilleri --- */
+    .menu-toggle {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1001;
+        background: var(--primary-color);
+        border: none;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        color: var(--white);
+        font-size: 24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    
+    .side-nav {
+        position: fixed;
+        top: 0;
+        right: -300px; /* Başlangıçta ekran dışında */
+        width: 280px;
+        height: 100%;
+        background: var(--white);
+        box-shadow: -4px 0 15px rgba(0,0,0,0.15);
+        z-index: 1000;
+        transition: right 0.4s ease-in-out;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .side-nav.open {
+        right: 0; /* 'open' class'ı eklendiğinde görünür olur */
+    }
+
+    .side-nav-main {
+        overflow-y: auto;
+        padding-top: 80px;
+    }
+    
+    .side-nav ul {
+        list-style: none;
+    }
+
+    .side-nav ul li a {
+        display: block;
+        padding: 15px 25px;
+        color: var(--text-dark);
+        text-decoration: none;
+        font-size: 1.1rem;
+        font-weight: 500;
+        transition: background 0.2s, color 0.2s;
+        border-bottom: 1px solid var(--bg-light);
+    }
+
+    .side-nav ul li a:hover {
+        background: var(--primary-color);
+        color: var(--white);
+    }
+
+    .side-nav-footer {
+        padding: 20px;
+        text-align: center;
+        margin-top: auto;
+        border-top: 1px solid var(--bg-light);
+    }
+
+    .side-nav-footer img {
+        max-width: 100px;
+        height: auto;
+    }
+
+
+    footer {
+        text-align: center;
+        margin-top: 3rem;
+        padding: 2rem 1rem 1rem;
+    }
+
+    footer img {
+        max-width: 150px;
+    }
+  </style>
+</head>
+<body>
+
+  <button class="menu-toggle" id="menuToggle">&#9776;</button>
+
+  <nav class="side-nav" id="sideNav">
+      <div class="side-nav-main">
+          <ul>
+              <li><a href="#kahvalti">Kahvaltı</a></li>
+              <li><a href="#ekstralar">Ekstralar</a></li>
+              <li><a href="#corba">Çorba</a></li>
+              <li><a href="#baslangic">Başlangıç &amp; Ekstralar</a></li>
+              <li><a href="#salatalar">Salatalar</a></li>
+              <li><a href="#kofteler">Köfteler</a></li>
+              <li><a href="#cocuk-menuleri">Çocuk Menüleri</a></li>
+              <li><a href="#steaks">Steak's</a></li>
+              <li><a href="#et-tavalar">Et Tavalar</a></li>
+              <li><a href="#fajitalar">Fajitalar</a></li>
+              <li><a href="#tavuk-tavalar">Tavuk Tavalar</a></li>
+              <li><a href="#hamburgerler">Hamburgerler</a></li>
+              <li><a href="#makarnalar">Makarnalar</a></li>
+              <li><a href="#quesadilla">Quesadilla</a></li>
+              <li><a href="#pideler">Pideler</a></li>
+              <li><a href="#tatlilar">Tatlılar</a></li>
+              <li><a href="#icecekler">İçecekler</a></li>
+          </ul>
+      </div>
+      <div class="side-nav-footer">
+          <img src="logo-1.png" alt="Açina Logo">
+      </div>
+  </nav>
+
+  <div class="menu-container">
+    <header class="header">
+      <img src="logo-1.png" alt="Açina Logo">
+    </header>
+
+    <section id="kahvalti" class="menu-category">
+      <h2 class="category-title">KAHVALTI</h2>
+      <div class="item">
+        <div class="item-title">Serpme Kahvaltı<span>300₺</span></div>
+        <div class="item-desc">Peynir çeşitleri (çeçil, kelle, beyaz, kaşar, burgu, top), zeytin (siyah ve yeşil), bal, kaymak, reçel çeşitleri, tereyağı, sosis ve patates kızartması, göz yumurta, söğüş (domates, salatalık, yeşillik), pişi, sigara böreği, macar salam, hindi salam, kahvaltı sosu (acuka), çikolata, tahin-pekmez, mıhlama, kahvaltı boyunca çay.</div>
+        <div class="item-sub-desc">*Kişi başı fiyatıdır. Extra kişi için 75₺ servis ücreti alınır.</div>
+      </div>
+      <div class="image-container"><img src="img/5.jpeg" alt="Kahvaltı"></div>
+    </section>
+
+    <section id="ekstralar" class="menu-category">
+        <h2 class="category-title">EKSTRALAR</h2>
+        <div class="item"><div class="item-title">Menemen <span>150₺</span></div></div>
+        <div class="item"><div class="item-title">Sucuklu Yumurta <span>150₺</span></div></div>
+        <div class="item"><div class="item-title">Omlet - Sade <span>90₺</span></div></div>
+        <div class="item"><div class="item-title">Omlet - Çeşnili <span>150₺</span></div></div>
+    </section>
+
+    <section id="corba" class="menu-category">
+        <h2 class="category-title">ÇORBA</h2>
+        <div class="item">
+            <div class="item-title">Kelle Çorbası <span>100₺</span></div>
+            <div class="item-desc">Kemalpaşa Usulü</div>
+        </div>
+        <div class="image-container"><img src="img/11.jpeg" alt="Çorba"></div>
+    </section>
+
+    <section id="baslangic" class="menu-category">
+        <h2 class="category-title">BAŞLANGIÇ &amp; EKSTRALAR</h2>
+        <div class="item"><div class="item-title">Hellim Tabağı <span>150₺</span></div><div class="item-desc">Kızarmış ekmek eşliğinde ızgara hellim peyniri.</div></div>
+        <div class="item"><div class="item-title">Beğendi <span>125₺</span></div><div class="item-desc">Baharatlarla harmanlanmış, beşamel sos eşliğinde hazırlanmış közlenmiş patlıcan.</div></div>
+        <div class="item"><div class="item-title">Mix Sepet <span>125₺</span></div><div class="item-desc">Nugget tavuk parçaları, sigara böreği, patates kızartması, soğan halkası.</div></div>
+        <div class="item"><div class="item-title">Kiremitte Kaşarlı Mantar <span>250₺</span></div></div>
+        <div class="item"><div class="item-title">Soğan Halkası <span>150₺</span></div></div>
+        <div class="item"><div class="item-title">Tavuk Nugget <span>100₺</span></div></div>
+        <div class="item"><div class="item-title">Patates Kızartması <span>100₺</span></div></div>
+        <div class="item"><div class="item-title">Sigara Böreği <span>120₺</span></div></div>
+    </section>
+    
+    <section id="salatalar" class="menu-category">
+        <h2 class="category-title">SALATALAR</h2>
+        <div class="item"><div class="item-title">Çoban Salata <span>125₺</span></div><div class="item-desc">Domates, salatalık, soğan ve biber ile hazırlanmış klasik lezzet.</div></div>
+        <div class="item"><div class="item-title">Sezar Salata <span>240₺</span></div><div class="item-desc">Açina özel yapım sezar salata sosu ile harmanlanmış marul üzerine kruton ekmeği ve ızgara tavuk parçacıkları.</div></div>
+        <div class="item"><div class="item-title">Yunan Salata <span>180₺</span></div><div class="item-desc">Salatalık, domates, soğan, beyaz peynir ve siyah zeytinle harmanlanmış lezzet.</div></div>
+        <div class="item"><div class="item-title">Ton Balıklı Salata <span>220₺</span></div><div class="item-desc">Ton balığı, mevsim yeşillikleri, soğan ve mısırın özel sos ile sunumu.</div></div>
+        <div class="item"><div class="item-title">Mevsim Salata <span>80₺</span></div><div class="item-desc">Özel sosu ile hazırlanan mevsim yeşillikleri, kırmızı lahana ve havuç gibi mevsim sebzeleri ile hazırlanmış salata.</div></div>
+    </section>
+
+    <section id="kofteler" class="menu-category">
+        <h2 class="category-title">KÖFTELER</h2>
+        <div class="item"><div class="item-title">Steak Köfte <span>350₺</span></div><div class="item-desc">Mozeralla peyniri ile hazırlanmış steak köfte, salata, közlenmiş domates - biber, patates kızartması, özel acı sos eşliğinde.</div></div>
+        <div class="image-container"><img src="img/9.jpeg" alt="Steak Köfte"></div>
+        <div class="item"><div class="item-title">Salkım Köfte <span>350₺</span></div><div class="item-desc">Kaşarlı köfte, patates kızartması, köz biber, domates ve özel acı sos eşliğinde.</div></div>
+        <div class="item"><div class="item-title">Pideli Köfte (Kiremitte) <span>300₺</span></div><div class="item-desc">Tırnak pide üzerine lezzetli küçük köfteler, yoğurtlu ve terayağlı özel sosu ile birlikte servis edilmektedir.</div></div>
+        <div class="item"><div class="item-title">Beğendili Köfte (Kiremitte) <span>320₺</span></div><div class="item-desc">Patlıcan beğendi yatağında yoğurt ve tereyağlı sos eşliğinde mini köfteler.</div></div>
+        <div class="item"><div class="item-title">Kasap Köfte <span>290₺</span></div><div class="item-desc">Mevsim salata, patates kızartması, közlenmiş domates - biber ve acı sos eşliğinde.</div></div>
+        <div class="image-container"><img src="img/14.jpeg" alt="Köfte Çeşitleri"></div>
+    </section>
+    
+    <section id="cocuk-menuleri" class="menu-category">
+        <h2 class="category-title">ÇOCUK MENÜLERİ</h2>
+        <div class="item"><div class="item-title">Mini Köfte <span>200₺</span></div><div class="item-desc">Çocuklar için hazırlanmış küçük porsiyonda köfteler, makarna ve patates kızartması eşliğinde.</div></div>
+        <div class="item"><div class="item-title">Mini Tavuk Izgara <span>200₺</span></div><div class="item-desc">Çocuklar için hazırlanmış mini ızgara tavuklar, patates kızartması eşliğinde.</div></div>
+    </section>
+
+    <section id="steaks" class="menu-category">
+        <h2 class="category-title">STEAK'S</h2>
+        <div class="item"><div class="item-title">Karışık Izgara <span>550₺</span></div><div class="item-desc">Antrikot, kuzu şiş, köfte, beyti ve kemiksiz tavuk ızgarada oluşmakta olup yanında sebze garnitürü, patates kızartması ile servis edilir.</div></div>
+        <div class="item"><div class="item-title">Lokum Bonfile <span>580₺</span></div><div class="item-desc">Özel marine lokum bonfile tereyağında, yanında sebze garnitürü, patates kızartması ile servis edilir.</div></div>
+        <div class="item"><div class="item-title">Dana Antrikot <span>475₺</span></div><div class="item-desc">Özel marine antrikot, közlenmiş domates - biber patates kızartması ve acı sos ile servis edilir.</div></div>
+        <div class="item"><div class="item-title">Steak Beğendi <span>580₺</span></div><div class="item-desc">Beğendi yatağında özel marine lokum bonfile, sebze garnitürü, patates kızartması ile servis edilir.</div></div>
+        <div class="item"><div class="item-title">Kuzu Pirzola <span>600₺</span></div><div class="item-desc">Kuzu pirzola, sebze garnitürü, patates kızartması ile servis edilir.</div></div>
+        <div class="item"><div class="item-title">Kuzu Beyti <span>525₺</span></div><div class="item-desc">Kuzu beyti, sebze garnitürü, patates kızartması ile servis edilir.</div></div>
+        <div class="item"><div class="item-title">Kuzu Şiş <span>475₺</span></div><div class="item-desc">Kuzu şiş, sebze garnitürü, patates kızartması ile servis edilir.</div></div>
+        <div class="item"><div class="item-title">Izgara Tavuk <span>230₺</span></div><div class="item-desc">Tavuk ızgara, patates kızartması, közlenmiş domates - biber ve özel salatası eşliğinde sunumu.</div></div>
+        <div class="image-container"><img src="img/7.jpeg" alt="Steaks"></div>
+    </section>
+    
+    <section id="et-tavalar" class="menu-category">
+        <h2 class="category-title">ET TAVALAR</h2>
+        <div class="item"><div class="item-title">Beef Strogonoff <span>480₺</span></div><div class="item-desc">Mantarlı ve kremalı sos eşliğinde bonfile et parçaları, karnişon turşu sunumu.</div></div>
+        <div class="item"><div class="item-title">Çökertme Kebabı <span>480₺</span></div><div class="item-desc">Kibrit patates ve tırnaklı pide yatağında, özel tereyağlı, yoğurtlu domates sosu eşliğinde dana bonfile parçaları.</div></div>
+        <div class="item"><div class="item-title">Sebzeli Et Kavurma <span>480₺</span></div><div class="item-desc">Sotelenmiş bonfile dilimleri, mantar, kapya biber, çarliston biber, havuç, çeri domates, soğan ve sarımsak ile hazırlanmış lezzet.</div></div>
+        <div class="item"><div class="item-title">Arnavut Ciğeri <span>320₺</span></div><div class="item-desc">Soğan, söğüş domates, biber garnitürü eşliğinde sıcak servis edilir.</div></div>
+        <div class="image-container"><img src="img/2.jpeg" alt="Et Tava"></div> 
+    </section>
+
+    <section id="fajitalar" class="menu-category">
+        <h2 class="category-title">FAJİTALAR</h2>
+        <div class="item"><div class="item-title">Tavuk Fajita <span>275₺</span></div><div class="item-desc">Marine tavuk dilimleri, mantar ve krema, kaliforniya biberi, sosya sosu, soğan ve sarımsak aromasından oluşan lezzet sunumu.</div></div>
+        <div class="item"><div class="item-title">Et Fajita <span>480₺</span></div><div class="item-desc">Marine edilmiş et bonfile dilimleri, mantar ve krema, kaliforniya biberi, soya sosu, soğan ve sarımsak aromasından oluşan lezzet sunumu.</div></div>
+        <div class="item"><div class="item-title">Combo Fajita <span>420₺</span></div><div class="item-desc">Marine edilmiş bonfile ve tavuk eti dilimleri, mantar ve krema, kaliforniya biberi, soya sosu, soğan ve sarımsak aromasından oluşan lezzet sunumu.</div></div>
+        <div class="image-container"><img src="img/1.jpeg" alt="Fajita"></div>
+    </section>
+    
+    <section id="tavuk-tavalar" class="menu-category">
+        <h2 class="category-title">TAVUK TAVALAR</h2>
+        <div class="item"><div class="item-title">Kremalı Dağ Kekikli Tavuk <span>225₺</span></div><div class="item-desc">Marinelenmiş tavuk parçalarının krema ve dağ kekiği ile soslanmasından oluşan lezzet, Penne makarna ve mevsim yeşillikleriyle servis edilir.</div></div>
+        <div class="item"><div class="item-title">Meksican Tavuk <span>250₺</span></div><div class="item-desc">Baharatlı acı sosu ile marinelenmiş tavuk parçalarının muhteşem uyumu, Penne makarna ve mevsim yeşillikleriyle servis edilir.</div></div>
+        <div class="item"><div class="item-title">Kendini Beğenmiş Tavuk <span>250₺</span></div><div class="item-desc">Lezzetli patlıcan beğendi yatağında, marine edilmiş tavuk parçaları, Penne makarna ve mevsim yeşillikleriyle servis edilir.</div></div>
+        <div class="item"><div class="item-title">Barbekü Soslu Tavuk <span>225₺</span></div><div class="item-desc">Marine edilmiş tavuk parçalarının barbekü sosla birleşmesinden oluşan lezzet, Penne makarna ve mevsim yeşillikleriyle servis edilir.</div></div>
+        <div class="item"><div class="item-title">Körili Tavuk <span>225₺</span></div><div class="item-desc">Marine edilmiş tavuk parçalarının köri ve krema ile buluşması, Penne makarna ve mevsim yeşillikleriyle servis edilir.</div></div>
+        <div class="item"><div class="item-title">Sweet Chili Soslu Tavuk <span>250₺</span></div><div class="item-desc">Tatlı ekşi aroması olan sweet chili sosunun marine edilmiş tavuk parçaları ile oluşturduğu tat, Penne makarna ve mevsim yeşillikleriyle servis edilir.</div></div>
+        <div class="item"><div class="item-title">Hot Chili Soslu Tavuk <span>225₺</span></div><div class="item-desc">Acı ekşi aroması olan hot chili sosunun marine edilmiş tavuk parçaları ile oluşturduğu tat, Penne makarna ve mevsim yeşillikleriyle servis edilir.</div></div>
+        <div class="item"><div class="item-title">Peynirli Fesleğenli Tavuk <span>250₺</span></div><div class="item-desc">Marine edilmiş tavuk parçalarının, pesto sosu, peynir ve baharatlarla muhteşem uyumu, Penne makarna ve mevsim yeşillikleriyle servis edilir.</div></div>
+        <div class="item"><div class="item-title">Açina Tavuk <span>250₺</span></div><div class="item-desc">Marine edilmiş tavuk parçaları biber mantar soğan ve domates ile oluşturduğu lezzet, Penne makarna ve mevsim yeşillikleriyle servis edilir.</div></div>
+        <div class="item"><div class="item-title">Kremalı Mantarlı Tavuk <span>250₺</span></div><div class="item-desc">Baharatlar eşliğinde marinelenmiş tavuk parçaları, mantar ve krema lezzetli, Penne makarna ve mevsim yeşillikleriyle servis edilir.</div></div>
+        <div class="image-container"><img src="img/6.jpeg" alt="Tavuk Tavalar"></div> 
+    </section>
+
+    <section id="hamburgerler" class="menu-category">
+        <h2 class="category-title">HAMBURGERLER</h2>
+        <div class="item"><div class="item-title">Steak Burger <span>300₺</span></div><div class="item-desc">Özel ekmeği içerisinde hazırlanmış bonfile eti, domates, marul, turşu ve patates kızartması eşliğinde sunumu.</div></div>
+        <div class="item"><div class="item-title">Special Burger <span>270₺</span></div><div class="item-desc">Özel ekmeği içerisinde hazırlanmış ızgara köftesi, dana jambon, cheddar peyniri, domates, marul ve turşunun patates kızartması, ballı hardallı ve acı sos eşliğinde sunumu.</div></div>
+        <div class="item"><div class="item-title">Mantarlı Burger <span>280₺</span></div><div class="item-desc">Özel ekmeği içerisinde hazırlanmış ızgara köftesi, füme pastırma, cheddar peyniri, domates, marul, turşu ve patates kızartması, ballı hardallı ve acı sos eşliğinde sunumu.</div></div>
+        <div class="item"><div class="item-title">Classic Burger <span>240₺</span></div><div class="item-desc">Özel ekmeği içerisinde hazırlanmış ızgara köftesi, cheddar peyniri, domates, marul, turşu ve patates kızartması, ballı hardallı ve acı sos eşliğinde sunumu.</div></div>
+    </section>
+
+    <section id="makarnalar" class="menu-category">
+        <h2 class="category-title">MAKARNALAR</h2>
+        <div class="item"><div class="item-title">Penne Arrabbiata <span>180₺</span></div><div class="item-desc">Acı sos, penne makarna ve baharatların Meksika'dan gelen lezzeti.</div></div>
+        <div class="item"><div class="item-title">Alfredo Soslu Spagetti <span>240₺</span></div><div class="item-desc">Özel alfredo sosuyla mantar, tavuk, pesto sos ve baharatlı spagetti.</div></div>
+        <div class="image-container"><img src="img/4.jpeg" alt="Makarna"></div>
+    </section>
+
+    <section id="quesadilla" class="menu-category">
+        <h2 class="category-title">QUESADILLA</h2>
+        <div class="item"><div class="item-title">Tavuklu Quesadilla <span>300₺</span></div><div class="item-desc">Tortillo ekmeği arasında, özel sosla marinelenmiş tavuk parçacıkları, meksika fasülyesi, kaliforniya biberi ve mozeralla peyniri.</div></div>
+        <div class="item"><div class="item-title">Etli Quesadilla <span>500₺</span></div><div class="item-desc">Tortillo ekmeği arasında, özel sosla marinelenmiş bonfile parçacıkları, meksika fasülyesi, kaliforniya biberi ve mozeralla peyniri.</div></div>
+    </section>
+    
+    <section id="pideler" class="menu-category">
+        <h2 class="category-title">PİDELER</h2>
+        <div class="item"><div class="item-title">Kıymalı Pide <span>200₺</span></div></div>
+        <div class="item"><div class="item-title">Kuşbaşılı Pide <span>240₺</span></div></div>
+        <div class="item"><div class="item-title">Kaşarlı Pide <span>200₺</span></div></div>
+        <div class="item"><div class="item-title">Kıymalı Kaşarlı Pide <span>220₺</span></div></div>
+        <div class="image-container"><img src="img/3.jpeg" alt="Pide"></div>
+        <div class="item"><div class="item-title">Kuşbaşılı Kaşarlı Pide <span>260₺</span></div></div>
+        <div class="item"><div class="item-title">Kaşarlı Sucuklu Pide <span>220₺</span></div></div>
+        <div class="item"><div class="item-title">Karışık Pide <span>260₺</span></div></div>
+        <div class="item"><div class="item-title">Lahmacun <span>90₺</span></div></div>
+        <div class="image-container"><img src="img/10.jpeg" alt="Lahmacun"></div>
+    </section>
+
+    <section id="tatlilar" class="menu-category">
+        <h2 class="category-title">TATLILAR</h2>
+        <div class="item"><div class="item-title">Katmer <span>200₺</span></div></div>
+        <div class="item"><div class="item-title">Saç Arası <span>200₺</span></div></div>
+        <div class="item"><div class="item-title">Künefe <span>175₺</span></div><div class="item-desc">Kaymak eşliğinde</div></div>
+        <div class="item"><div class="item-title">Kemalpaşa Tatlısı <span>100₺</span></div><div class="item-desc">Tercihe göre kaymak, dondurma, tahin veya fıstık ceviz ilavesi ile.</div></div>
+    </section>
+
+    <section id="icecekler" class="menu-category">
+        <h2 class="category-title">İÇECEKLER</h2>
+        <div class="item"><div class="item-title">Meşrubat <span>60₺</span></div><div class="item-desc">Kola, Fanta, Gazoz, Meyve Suyu, Ice Tea, Limonata</div></div>
+        <div class="item"><div class="item-title">Şıra <span>70₺</span></div></div>
+        <div class="item"><div class="item-title">Şalgam <span>45₺</span></div></div>
+        <div class="item"><div class="item-title">Ayran <span>35₺</span></div></div>
+        <div class="item"><div class="item-title">Su <span>20₺</span></div></div>
+        <div class="item"><div class="item-title">Litrelik Su <span>40₺</span></div></div>
+        <div class="item"><div class="item-title">Çay <span>20₺</span></div></div>
+        <div class="item"><div class="item-title">Türk Kahvesi <span>50₺</span></div></div>
+    </section>
+
+    <footer>
+      <img src="logo-1.png" alt="Açina Logo">
+    </footer>
+    
+  </div>
+
+<script>
+    const menuToggle = document.getElementById('menuToggle');
+    const sideNav = document.getElementById('sideNav');
+    const navLinks = document.querySelectorAll('.side-nav a');
+
+    // Menüyü aç/kapat
+    menuToggle.addEventListener('click', () => {
+        sideNav.classList.toggle('open');
+    });
+
+    // Bir linke tıklandığında menüyü kapat
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            sideNav.classList.remove('open');
+        });
+    });
+</script>
+
+</body>
+</html>
